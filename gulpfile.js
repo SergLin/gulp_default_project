@@ -12,11 +12,13 @@ var gulp = require('gulp'),
     pngquant = require('imagemin-pngquant'),
     rimraf = require('rimraf'),
     browserSync = require("browser-sync"),
-    notify = require("gulp-notify"),
+    notify = require('gulp-notify'),
+    jade = require('gulp-jade'),
     reload = browserSync.reload;
 
 var path = {
     build: { //Тут мы укажем куда складывать готовые после сборки файлы
+        jade: 'build/',
         html: 'build/',
         js: 'build/js/',
         css: 'build/css/',
@@ -24,6 +26,7 @@ var path = {
         fonts: 'build/fonts/'
     },
     src: { //Пути откуда брать исходники
+        jade: 'src/*.jade', //Синтаксис src/*.jade говорит gulp что мы хотим взять все файлы с расширением .html
         html: 'src/*.html', //Синтаксис src/*.html говорит gulp что мы хотим взять все файлы с расширением .html
         js: 'src/js/main.js',//В стилях и скриптах нам понадобятся только main файлы
         style: 'src/sass/style.scss',
@@ -31,6 +34,7 @@ var path = {
         fonts: 'src/fonts/**/*.*'
     },
     watch: { //Тут мы укажем, за изменением каких файлов мы хотим наблюдать
+        jade: 'src/**/*.jade',
         html: 'src/**/*.html',
         js: 'src/js/**/*.js',
         style: 'src/sass/**/*.scss',
@@ -51,6 +55,21 @@ var config = {
     port: 9000,
     logPrefix: "Frontend_Devil"
 };
+
+//Таск для сборки jade:
+
+gulp.task('jade:build', function() {
+  var YOUR_LOCALS = {};
+ 
+  gulp.src(path.src.jade) //Выберем файлы по нужному пути
+    .pipe(jade({
+      locals: YOUR_LOCALS
+    }))
+    // .pipe(rigger()) //Прогоним через rigger
+    .pipe(gulp.dest(path.build.jade)) //Выплюнем их в папку build
+    .pipe(reload({stream: true})) //И перезагрузим наш сервер для обновлений
+    // .pipe(notify('JADE - ГотовеньКО!!!'));
+});
 
 //Таск для сборки html:
 
@@ -114,6 +133,7 @@ gulp.task('fonts:build', function() {
 //Таск сборки:
 
 gulp.task('build', [
+    'jade:build',
     'html:build',
     'js:build',
     'style:build',
@@ -124,6 +144,9 @@ gulp.task('build', [
 //Таск по отслеживанию изменений:
 
 gulp.task('watch', function(){
+    watch([path.watch.jade], function(event, cb) {
+        gulp.start('jade:build');
+    });
     watch([path.watch.html], function(event, cb) {
         gulp.start('html:build');
     });
