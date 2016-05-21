@@ -1,0 +1,22 @@
+{
+  "name": "default-project",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Sergey Linnik <sergiuslinnikus@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize.css": "*",
+    "jquery": "2.*"
+  }
+}
