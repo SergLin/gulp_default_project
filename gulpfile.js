@@ -17,13 +17,13 @@ var gulp = require('gulp'),
     reload = browserSync.reload;
 
 var path = {
-    build: { //Тут мы укажем куда складывать готовые после сборки файлы
-        jade: 'build/',
-        html: 'build/',
-        js: 'build/js/',
-        css: 'build/css/',
-        img: 'build/img/',
-        fonts: 'build/fonts/'
+    dist: { //Тут мы укажем куда складывать готовые после сборки файлы
+        jade: 'dist/',
+        html: 'dist/',
+        js: 'dist/js/',
+        css: 'dist/css/',
+        img: 'dist/img/',
+        fonts: 'dist/fonts/'
     },
     src: { //Пути откуда брать исходники
         jade: 'src/*.jade', //Синтаксис src/*.jade говорит gulp что мы хотим взять все файлы с расширением .html
@@ -41,14 +41,14 @@ var path = {
         img: 'src/img/**/*.*',
         fonts: 'src/fonts/**/*.*'
     },
-    clean: './build'
+    clean: './dist'
 };
 
 //Переменная с настройками dev сервера:
 
 var config = {
     server: {
-        baseDir: "./build"
+        baseDir: "./dist"
     },
     tunnel: true,
     host: 'localhost',
@@ -58,7 +58,7 @@ var config = {
 
 //Таск для сборки jade:
 
-gulp.task('jade:build', function() {
+gulp.task('jade:dist', function() {
   var YOUR_LOCALS = {};
  
   gulp.src(path.src.jade) //Выберем файлы по нужному пути
@@ -66,51 +66,51 @@ gulp.task('jade:build', function() {
       locals: YOUR_LOCALS
     }))
     // .pipe(rigger()) //Прогоним через rigger
-    .pipe(gulp.dest(path.build.jade)) //Выплюнем их в папку build
+    .pipe(gulp.dest(path.dist.jade)) //Выплюнем их в папку dist
     .pipe(reload({stream: true})) //И перезагрузим наш сервер для обновлений
     // .pipe(notify('JADE - ГотовеньКО!!!'));
 });
 
 //Таск для сборки html:
 
-gulp.task('html:build', function () {
+gulp.task('html:dist', function () {
     gulp.src(path.src.html) //Выберем файлы по нужному пути
         .pipe(rigger()) //Прогоним через rigger
-        .pipe(gulp.dest(path.build.html)) //Выплюнем их в папку build
+        .pipe(gulp.dest(path.dist.html)) //Выплюнем их в папку dist
         .pipe(reload({stream: true})) //И перезагрузим наш сервер для обновлений
         // .pipe(notify('HTML - ГотовеньКО!!!'));
 });
 
 //Таск по сборке скриптов:
 
-gulp.task('js:build', function () {
+gulp.task('js:dist', function () {
     gulp.src(path.src.js) //Найдем наш main файл
         .pipe(rigger()) //Прогоним через rigger
         .pipe(sourcemaps.init()) //Инициализируем sourcemap
         .pipe(uglify()) //Сожмем наш js
         .pipe(sourcemaps.write()) //Пропишем карты
-        .pipe(gulp.dest(path.build.js)) //Выплюнем готовый файл в build
+        .pipe(gulp.dest(path.dist.js)) //Выплюнем готовый файл в dist
         .pipe(reload({stream: true})) //И перезагрузим сервер
         // .pipe(notify('JS - ГотовеньКО!!!')); 
 });
 
 //Таск для сборки SCSS:
 
-gulp.task('style:build', function () {
+gulp.task('style:dist', function () {
     gulp.src(path.src.style) //Выберем наш main.scss
         .pipe(sourcemaps.init()) //То же самое что и с js
         .pipe(sass()) //Скомпилируем
         .pipe(prefixer({browsers: ['last 10 versions']})) //Добавим вендорные префиксы
         .pipe(cleanCSS()) //Сожмем
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest(path.build.css)) //И в build
+        .pipe(gulp.dest(path.dist.css)) //И в dist
         .pipe(reload({stream: true}))
         // .pipe(notify('CSS - ГотовеньКО!!!'));
 });
 
 //Таск по картинкам:
 
-gulp.task('image:build', function () {
+gulp.task('image:dist', function () {
     gulp.src(path.src.img) //Выберем наши картинки
         .pipe(imagemin({ //Сожмем их
             progressive: true,
@@ -118,49 +118,49 @@ gulp.task('image:build', function () {
             use: [pngquant()],
             interlaced: true
         }))
-        .pipe(gulp.dest(path.build.img)) //И бросим в build
+        .pipe(gulp.dest(path.dist.img)) //И бросим в dist
         .pipe(reload({stream: true}))
         // .pipe(notify('PIC - ГотовеньКО!!!'));
 });
 
 //Таск по шрифтам:
 
-gulp.task('fonts:build', function() {
+gulp.task('fonts:dist', function() {
     gulp.src(path.src.fonts)
-        .pipe(gulp.dest(path.build.fonts))
+        .pipe(gulp.dest(path.dist.fonts))
 });
 
 //Таск сборки:
 
-gulp.task('build', [
-    'jade:build',
-    'html:build',
-    'js:build',
-    'style:build',
-    'fonts:build',
-    'image:build'
+gulp.task('dist', [
+    'jade:dist',
+    'html:dist',
+    'js:dist',
+    'style:dist',
+    'fonts:dist',
+    'image:dist'
 ]);
 
 //Таск по отслеживанию изменений:
 
 gulp.task('watch', function(){
     watch([path.watch.jade], function(event, cb) {
-        gulp.start('jade:build');
+        gulp.start('jade:dist');
     });
     watch([path.watch.html], function(event, cb) {
-        gulp.start('html:build');
+        gulp.start('html:dist');
     });
     watch([path.watch.style], function(event, cb) {
-        gulp.start('style:build');
+        gulp.start('style:dist');
     });
     watch([path.watch.js], function(event, cb) {
-        gulp.start('js:build');
+        gulp.start('js:dist');
     });
     watch([path.watch.img], function(event, cb) {
-        gulp.start('image:build');
+        gulp.start('image:dist');
     });
     watch([path.watch.fonts], function(event, cb) {
-        gulp.start('fonts:build');
+        gulp.start('fonts:dist');
     });
 });
 
@@ -178,4 +178,4 @@ gulp.task('clean', function (cb) {
 
 // Дефолтный таск:
 
-gulp.task('default', ['build', 'webserver', 'watch']);
+gulp.task('default', ['dist', 'webserver', 'watch']);
