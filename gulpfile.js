@@ -14,10 +14,12 @@ var gulp = require('gulp'),
     browserSync = require("browser-sync"),
     notify = require('gulp-notify'),
     jade = require('gulp-jade'),
+    pug = require('gulp-pug'),
     reload = browserSync.reload;
 
 var path = {
     dist: { //Тут мы укажем куда складывать готовые после сборки файлы
+        pug: 'dist/',
         jade: 'dist/',
         html: 'dist/',
         js: 'dist/js/',
@@ -26,6 +28,7 @@ var path = {
         fonts: 'dist/fonts/'
     },
     src: { //Пути откуда брать исходники
+        pug: 'src/*.pug', //Синтаксис src/*.pug говорит gulp что мы хотим взять все файлы с расширением .html
         jade: 'src/*.jade', //Синтаксис src/*.jade говорит gulp что мы хотим взять все файлы с расширением .html
         html: 'src/*.html', //Синтаксис src/*.html говорит gulp что мы хотим взять все файлы с расширением .html
         js: 'src/js/main.js',//В стилях и скриптах нам понадобятся только main файлы
@@ -34,6 +37,7 @@ var path = {
         fonts: 'src/fonts/**/*.*'
     },
     watch: { //Тут мы укажем, за изменением каких файлов мы хотим наблюдать
+        pug: 'src/**/*.pug',
         jade: 'src/**/*.jade',
         html: 'src/**/*.html',
         js: 'src/js/**/*.js',
@@ -56,6 +60,17 @@ var config = {
     logPrefix: "Frontend_Devil"
 };
 
+//Таск для сборки pug:
+
+gulp.task('pug:dist', function() {
+   gulp.src(path.src.pug)
+      .pipe(pug({
+        // Your options in here. 
+      }))
+      .pipe(gulp.dest(path.dist.pug)) //Выплюнем их в папку dist
+      .pipe(reload({stream: true})) //И перезагрузим наш сервер для обновлений
+});
+
 //Таск для сборки jade:
 
 gulp.task('jade:dist', function() {
@@ -65,7 +80,6 @@ gulp.task('jade:dist', function() {
     .pipe(jade({
       locals: YOUR_LOCALS
     }))
-    // .pipe(rigger()) //Прогоним через rigger
     .pipe(gulp.dest(path.dist.jade)) //Выплюнем их в папку dist
     .pipe(reload({stream: true})) //И перезагрузим наш сервер для обновлений
     // .pipe(notify('JADE - ГотовеньКО!!!'));
@@ -133,6 +147,7 @@ gulp.task('fonts:dist', function() {
 //Таск сборки:
 
 gulp.task('dist', [
+    'pug:dist',
     'jade:dist',
     'html:dist',
     'js:dist',
@@ -144,6 +159,9 @@ gulp.task('dist', [
 //Таск по отслеживанию изменений:
 
 gulp.task('watch', function(){
+     watch([path.watch.pug], function(event, cb) {
+        gulp.start('pug:dist');
+    });
     watch([path.watch.jade], function(event, cb) {
         gulp.start('jade:dist');
     });

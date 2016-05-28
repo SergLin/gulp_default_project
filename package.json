@@ -8,7 +8,7 @@
   },
   "author": "Sergey Linnik <sergiuslinnikus@gmail.com>",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "browser-sync": "^2.12.8",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
@@ -16,12 +16,14 @@
     "gulp-imagemin": "^3.0.1",
     "gulp-jade": "^1.1.0",
     "gulp-notify": "^2.2.0",
+    "gulp-pug": "^3.0.2",
     "gulp-rigger": "^0.5.8",
     "gulp-sass": "^2.3.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
     "gulp-watch": "^4.3.5",
     "imagemin-pngquant": "^5.0.0",
+    "pug": "^2.0.0-alpha8",
     "rimraf": "^2.5.2"
   }
 }
