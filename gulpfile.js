@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     prefixer = require('gulp-autoprefixer'),
     uglify = require('gulp-uglify'),
     sass = require('gulp-sass'),
+    compass = require('gulp-compass'),
     sourcemaps = require('gulp-sourcemaps'),
     rigger = require('gulp-rigger'),
     cleanCSS = require('gulp-clean-css'),
@@ -32,7 +33,7 @@ var path = {
         jade: 'src/*.jade', //Синтаксис src/*.jade говорит gulp что мы хотим взять все файлы с расширением .html
         html: 'src/*.html', //Синтаксис src/*.html говорит gulp что мы хотим взять все файлы с расширением .html
         js: 'src/js/main.js',//В стилях и скриптах нам понадобятся только main файлы
-        style: 'src/sass/style.scss',
+        style: 'src/sass/main.scss',
         img: 'src/img/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
         fonts: 'src/fonts/**/*.*'
     },
@@ -54,7 +55,7 @@ var config = {
     server: {
         baseDir: "./dist"
     },
-    tunnel: true,
+    tunnel: false,
     host: 'localhost',
     port: 9000,
     logPrefix: "Frontend_Devil"
@@ -65,6 +66,7 @@ var config = {
 gulp.task('pug:dist', function() {
    gulp.src(path.src.pug)
       .pipe(pug({
+        pretty: true
         // Your options in here. 
       }))
       .pipe(gulp.dest(path.dist.pug)) //Выплюнем их в папку dist
@@ -78,7 +80,8 @@ gulp.task('jade:dist', function() {
  
   gulp.src(path.src.jade) //Выберем файлы по нужному пути
     .pipe(jade({
-      locals: YOUR_LOCALS
+      locals: YOUR_LOCALS,
+      pretty: true
     }))
     .pipe(gulp.dest(path.dist.jade)) //Выплюнем их в папку dist
     .pipe(reload({stream: true})) //И перезагрузим наш сервер для обновлений
@@ -109,7 +112,7 @@ gulp.task('js:dist', function () {
 });
 
 //Таск для сборки SCSS:
-
+/*
 gulp.task('style:dist', function () {
     gulp.src(path.src.style) //Выберем наш main.scss
         .pipe(sourcemaps.init()) //То же самое что и с js
@@ -120,6 +123,24 @@ gulp.task('style:dist', function () {
         .pipe(gulp.dest(path.dist.css)) //И в dist
         .pipe(reload({stream: true}))
         // .pipe(notify('CSS - ГотовеньКО!!!'));
+});
+*/
+
+
+//Таск для сборки Compass-SCSS:
+
+gulp.task('compass:dist', function() {
+  gulp.src('./src/**/*.scss')
+    .pipe(compass({
+      config_file: './config.rb',
+      css: './src/css',
+      sass: './src/sass'
+    }))
+    .pipe(sourcemaps.init()) //Инициализируем sourcemap
+    .pipe(cleanCSS()) //Сожмем
+    .pipe(sourcemaps.write()) //Пропишем карты
+    .pipe(gulp.dest(path.dist.css))
+    .pipe(reload({stream: true}));
 });
 
 //Таск по картинкам:
@@ -151,7 +172,8 @@ gulp.task('dist', [
     'jade:dist',
     'html:dist',
     'js:dist',
-    'style:dist',
+ //   'style:dist',
+    'compass:dist',
     'fonts:dist',
     'image:dist'
 ]);
@@ -168,8 +190,11 @@ gulp.task('watch', function(){
     watch([path.watch.html], function(event, cb) {
         gulp.start('html:dist');
     });
-    watch([path.watch.style], function(event, cb) {
+/*    watch([path.watch.style], function(event, cb) {
         gulp.start('style:dist');
+    }); */
+     watch([path.watch.style], function(event, cb) {
+        gulp.start('compass:dist');
     });
     watch([path.watch.js], function(event, cb) {
         gulp.start('js:dist');
