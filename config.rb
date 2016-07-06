@@ -2,11 +2,11 @@ require 'compass/import-once/activate'
 # Require any additional compass plugins here.
 
 # Set this to the root of your project when deployed:
-http_path = "src/"
-css_dir = "src/css"
-sass_dir = "src/sass"
-images_dir = "src/img"
-javascripts_dir = "src/js"
+http_path = "project/src/"
+css_dir = "project/src/css"
+sass_dir = "project/src/sass"
+images_dir = "project/src/img"
+javascripts_dir = "project/src/js"
 
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded 
