@@ -34,7 +34,7 @@ var path = {
         html: 'project/src/*.html', //Синтаксис src/*.html говорит gulp что мы хотим взять все файлы с расширением .html
         js: 'project/src/js/main.js',//В стилях и скриптах нам понадобятся только main файлы
         style: 'project/src/sass/main.scss',
-        img: 'project/src/img/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
+        img: 'project/src/img/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
         fonts: 'project/src/fonts/**/*.*'
     },
     watch: { //Тут мы укажем, за изменением каких файлов мы хотим наблюдать
@@ -43,7 +43,7 @@ var path = {
         html: 'project/src/**/*.html',
         js: 'project/src/js/**/*.js',
         style: 'project/src/sass/**/*.scss',
-        img: 'project/src/img/**/*.*',
+        img: 'project/src/img/*.*',
         fonts: 'project/src/fonts/**/*.*'
     },
     clean: './project/dist'
