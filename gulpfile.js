@@ -20,40 +20,40 @@ var gulp = require('gulp'),
 
 var path = {
     dist: { //Тут мы укажем куда складывать готовые после сборки файлы
-        pug: 'project/dist/',
-        jade: 'project/dist/',
-        html: 'project/dist/',
-        js: 'project/dist/js/',
-        css: 'project/dist/css/',
-        img: 'project/dist/img/',
-        fonts: 'project/dist/fonts/'
+        pug: 'dist/',
+        jade: 'dist/',
+        html: 'dist/',
+        js: 'dist/js/',
+        css: 'dist/css/',
+        img: 'dist/img/',
+        fonts: 'dist/fonts/'
     },
     src: { //Пути откуда брать исходники
-        pug: 'project/src/*.pug', //Синтаксис src/*.pug говорит gulp что мы хотим взять все файлы с расширением .html
-        jade: 'project/src/*.jade', //Синтаксис src/*.jade говорит gulp что мы хотим взять все файлы с расширением .html
-        html: 'project/src/*.html', //Синтаксис src/*.html говорит gulp что мы хотим взять все файлы с расширением .html
-        js: 'project/src/js/main.js',//В стилях и скриптах нам понадобятся только main файлы
-        style: 'project/src/sass/main.scss',
-        img: 'project/src/img/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
-        fonts: 'project/src/fonts/**/*.*'
+        pug: 'src/*.pug', //Синтаксис src/*.pug говорит gulp что мы хотим взять все файлы с расширением .html
+        jade: 'src/*.jade', //Синтаксис src/*.jade говорит gulp что мы хотим взять все файлы с расширением .html
+        html: 'src/*.html', //Синтаксис src/*.html говорит gulp что мы хотим взять все файлы с расширением .html
+        js: 'src/js/main.js',//В стилях и скриптах нам понадобятся только main файлы
+        style: 'src/sass/main.scss',
+        img: 'src/img/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
+        fonts: 'src/fonts/**/*.*'
     },
     watch: { //Тут мы укажем, за изменением каких файлов мы хотим наблюдать
-        pug: 'project/src/**/*.pug',
-        jade: 'project/src/**/*.jade',
-        html: 'project/src/**/*.html',
-        js: 'project/src/js/**/*.js',
-        style: 'project/src/sass/**/*.scss',
-        img: 'project/src/img/*.*',
-        fonts: 'project/src/fonts/**/*.*'
+        pug: 'src/**/*.pug',
+        jade: 'src/**/*.jade',
+        html: 'src/**/*.html',
+        js: 'src/js/**/*.js',
+        style: 'src/sass/**/*.scss',
+        img: 'src/img/*.*',
+        fonts: 'src/fonts/**/*.*'
     },
-    clean: './project/dist'
+    clean: './dist'
 };
 
 //Переменная с настройками dev сервера:
 
 var config = {
     server: {
-        baseDir: "./project/dist"
+        baseDir: "./dist"
     },
     tunnel: false,
     host: 'localhost',
@@ -129,11 +129,11 @@ gulp.task('style:dist', function () {
 //Таск для сборки Compass-SCSS:
 
 gulp.task('compass:dist', function() {
-  gulp.src('./project/src/**/*.scss')
+  gulp.src('./src/**/*.scss')
     .pipe(compass({
       config_file: './config.rb',
-      css: './project/src/css',
-      sass: './project/src/sass'
+      css: './src/css',
+      sass: './src/sass'
     }))
     .pipe(sourcemaps.init()) //Инициализируем sourcemap
     .pipe(cleanCSS()) //Сожмем
